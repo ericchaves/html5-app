@@ -1,0 +1,11 @@
+{
+  "name": "html5-app",
+  "private": true,
+  "dependencies": {
+    "normalize-css": "~3.0.1",
+    "jquery": "~1.11.0",
+    "backbone": "~1.1.2",
+    "modernizr": "~2.8.1"
+  },
+  "devDependencies": {}
+}

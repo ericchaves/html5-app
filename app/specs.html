@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	 	<!-- bower:css -->
+	 	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css" />
+	 	<!-- endbower -->
+    <link rel="stylesheet" href="bower_components/mocha/mocha.css" />
+    
+    <!-- bower:js -->
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+    <!-- endbower -->
+    <script src="bower_components/mocha/mocha.js"></script>
+    <script src="bower_components/chai/chai.js"></script>
+    <script src="bower_components/sinon/lib/sinon.js"></script>
+    <script src="bower_components/sinon-chai/lib/sinon-chai.js"></script>
+    <script>
+		mocha.setup('bdd');
+	</script>
+    </script>
+    <script>
+      onload = function(){
+        var runner = mocha.run();
+      };
+      var expect = chai.expect;
+      var assert = chai.assert;
+      var should = chai.should();
+    </script>
+  </head>
+  <body>
+    <!-- source -->
+    <script src="scripts/templates/templates.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/views/home.js"></script>
+    <script src="scripts/routes/main.js"></script>
+    <!-- endsource -->
+    <!-- specs -->
+    <script src="specs/main.spec.js"></script>
+    <!-- endspecs -->    
+    <div id="mocha"></div>
+  </body>
+</html>
