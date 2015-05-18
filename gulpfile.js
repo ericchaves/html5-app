@@ -164,16 +164,17 @@ gulp.task('test:sauce', function (done) {
     var options = {
         username: process.env.SAUCE_USERNAME,
         accessKey: process.env.SAUCE_ACCESS_KEY,
-        verbose: true,
+        verbose: false,
         logfile: './sauce_connect.log'  
     };
-        
+    
+    log('opening Sauce Connect tunnel.');
     launcher(options, function(err, tunnel){
         if (err) { 
             log('error detected.');
             return done(err); 
         }
-        log('Sauce Connect connected.');
+        log('tunnel connected.');
         
         var mocha = require('gulp-mocha');
 
@@ -181,8 +182,9 @@ gulp.task('test:sauce', function (done) {
         return gulp.src('test/sauce/**/*.js', {read: false})
             .pipe(mocha({reporter: 'spec', ui: 'bdd'}))
             .on('end', function() {
+                log('closing tunnel.');
                 tunnel.close(function(){
-                    log('Sauce Connect disconnected.');
+                    log('tunnel closed.');
                     done();
                 });
             });        

@@ -1,4 +1,7 @@
 /*global describe,before,beforeEach,after,afterEach,it,xit, process */
+var username = process.env.SAUCE_USERNAME || "SAUCE_USERNAME";
+var accessKey = process.env.SAUCE_ACCESS_KEY || "SAUCE_ACCESS_KEY";
+
 require('colors');
 var wd = require('wd');
 var chai = require('chai');
@@ -22,7 +25,8 @@ _.each(desired, function(target){
     var browser;
     
     before(function(done){
-      browser = wd.promiseChainRemote('ondemand.saucelabs.com', 80, process.env.SAUCE_USERNAME, process.env.SAUCE_ACCESS_KEY);
+      //browser = wd.promiseChainRemote("localhost", 4445, username, accessKey);
+      browser = wd.promiseChainRemote('ondemand.saucelabs.com', 80, username, accessKey);
       var cap = _.merge({tags:['customer X'], name: 'visit landing page'}, target); 
       browser
         .init(cap)
@@ -39,6 +43,14 @@ _.each(desired, function(target){
       browser
       .title()
         .should.become('HTML5 App')
+      .nodeify(done);
+    });
+
+    it('should have hello in a unit hero', function(done) {
+      browser
+      .elementByCssSelector('.hero-unit h1')
+      .text()
+        .should.become('Hello!')
       .nodeify(done);
     });
   
