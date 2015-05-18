@@ -5,10 +5,12 @@ var gulp = require('gulp');
 var util = require('gulp-util');
 var log = util.log;
 var mocha = require('gulp-mocha');
+var plumber = require('gulp-plumber');
 
 gulp.task('dot', function() {
   var dotPacker = require("gulp-dotjs-packer");
   gulp.src('app/scripts/templates/*.jst')
+    .pipe(plumber())
     .pipe(dotPacker({
       fileName: "templates.js"
     }))
@@ -23,6 +25,7 @@ gulp.task('lint', function () {
     var jshint = require('gulp-jshint');
 
     return gulp.src('app/scripts/**/*.js')
+        .pipe(plumber())
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -31,6 +34,7 @@ gulp.task('styles', function () {
     var sass = require('gulp-sass');
 
     return gulp.src('app/styles/*.scss')
+        .pipe(plumber())
         .pipe(sass({
             precision: 10
         }))
@@ -42,6 +46,7 @@ gulp.task('images', function () {
         imagemin = require('gulp-imagemin');
 
     return gulp.src('app/images/**/*')
+        .pipe(plumber())
         .pipe(cache(imagemin({
             progressive: true,
             interlaced: true
@@ -70,6 +75,7 @@ gulp.task('html', ['styles'], function () {
         assets = useref.assets();
 
     return gulp.src('app/*.html')
+        .pipe(plumber())
         .pipe(assets)
         .pipe(gulpif('*.js', uglify()))
         .pipe(gulpif('*.css', minifyCss()))
@@ -82,18 +88,21 @@ gulp.task('wiredep', function () {
     var wiredep = require('wiredep').stream;
 
     gulp.src('app/styles/*.scss')
+        .pipe(plumber())
         .pipe(wiredep({
             directory: 'app/bower_components'
         }))
         .pipe(gulp.dest('app/styles'));
 
     gulp.src('app/index.html')
+        .pipe(plumber())
         .pipe(wiredep({
             directory: 'app/bower_components'
         }))
         .pipe(gulp.dest('app'));
         
     gulp.src('app/specs.html')
+        .pipe(plumber())
         .pipe(wiredep({
             directory: 'app/bower_components',
             devDependencies: true
@@ -129,10 +138,10 @@ gulp.task('serve', ['dot','styles', 'connect'], function () {
         'app/*.html',
         'app/styles/**/*.css',
         'app/scripts/**/*.js',
-        'app/images/**/*',
-        'app/templates/**/*.jst'
+        'app/images/**/*'
     ]).on('change', livereload.changed);
     
+    gulp.watch('app/templates/**/*.jst', ['dot']);
     gulp.watch('app/styles/**/*.scss', ['styles']);
     gulp.watch('bower.json', ['wiredep']);
 });
@@ -170,13 +179,13 @@ gulp.task('test:sauce', function (done) {
 
         // gulp-mocha needs filepaths so you can't have any plugins before it
         return gulp.src('test/sauce/**/*.js', {read: false})
-        .pipe(mocha({reporter: 'spec', ui: 'bdd'}))
-        .on('end', function() {
-            tunnel.close(function(){
-                log('Sauce Connect disconnected.');
-                done();
-            });
-        });        
+            .pipe(mocha({reporter: 'spec', ui: 'bdd'}))
+            .on('end', function() {
+                tunnel.close(function(){
+                    log('Sauce Connect disconnected.');
+                    done();
+                });
+            });        
     });
 
 });

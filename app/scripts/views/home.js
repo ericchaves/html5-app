@@ -6,14 +6,15 @@ App.Views = App.Views || {};
     'use strict';
 
     App.Views.Home = Backbone.View.extend({
-        template: JST['home'],
+        template: JST.home,
         tagName: 'div',
         el : '.container',
         events: {},
 
         initialize: function () {
-            if (this.model)
+            if (this.model){
                 this.listenTo(this.model, 'change', this.render);
+            }
         },
 
         render: function () {

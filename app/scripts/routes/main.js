@@ -7,7 +7,7 @@ App.Routers = App.Routers || {};
 
     App.Routers.Main = Backbone.Router.extend({
         routes: {
-            "": "index"
+            '': 'index'
         },
         index: function(){
             var home = new App.Views.Home();

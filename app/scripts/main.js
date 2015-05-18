@@ -1,4 +1,4 @@
-/* global App, $ */
+/* global App, $, Backbone */
 
 
 window.App = {
